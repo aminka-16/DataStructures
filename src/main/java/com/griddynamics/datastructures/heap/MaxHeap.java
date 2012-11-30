@@ -46,30 +46,7 @@ public class MaxHeap {
 		}
 		return false;
 	}
-	
-	public boolean contains2(int n) {
-		if (array[0] < n) {
-			return false;
-		}
-		int parentIndex=0;
-		int leftChild=getLeftChild(parentIndex);
-		int rightChild=getRightChild(parentIndex);
-		while(leftChild < array.length || rightChild < array.length){
-			if(n==array[parentIndex])
-				return true;
-			if(array[leftChild]>n){
-				parentIndex=leftChild;
-			}
-			else if(array[rightChild]>n){
-				parentIndex=rightChild;
-			}
-			
-			leftChild=getLeftChild(parentIndex);
-			rightChild=getRightChild(parentIndex);
-		}
-		return false;
-	}
-
+		
 	public boolean remove(int element) {
 		int index = findIndexOfElement(element);
 		if (index == -1) {
