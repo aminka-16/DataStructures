@@ -46,6 +46,29 @@ public class MaxHeap {
 		}
 		return false;
 	}
+	
+	public boolean contains2(int n) {
+		if (array[0] < n) {
+			return false;
+		}
+		int parentIndex=0;
+		int leftChild=getLeftChild(parentIndex);
+		int rightChild=getRightChild(parentIndex);
+		while(leftChild < array.length || rightChild < array.length){
+			if(n==array[parentIndex])
+				return true;
+			if(array[leftChild]>n){
+				parentIndex=leftChild;
+			}
+			else if(array[rightChild]>n){
+				parentIndex=rightChild;
+			}
+			
+			leftChild=getLeftChild(parentIndex);
+			rightChild=getRightChild(parentIndex);
+		}
+		return false;
+	}
 
 	public boolean remove(int element) {
 		int index = findIndexOfElement(element);
@@ -59,11 +82,9 @@ public class MaxHeap {
 		return true;
 	}
 
-	int[] getHeap() {
+	public int[] getHeap() {
 		return Arrays.copyOfRange(array, 0, array.length);
 	}
-
-
 	
 	private int getLeftChild(int parentIndex) {
 		return parentIndex * 2 + 1;
@@ -73,65 +94,24 @@ public class MaxHeap {
 		return parentIndex * 2 + 2;
 	}
 	
-//	private void buildTreeFromTheTop(int index) {
-//	int leftChildIndex = getLeftChild(index);
-//	int rightChildIndex = getRightChild(index);
-//	while (leftChildIndex > array.length || rightChildIndex > array.length ||
-//			array[index] > array[leftChildIndex] && array[index] > array[rightChildIndex]) {
-//		leftChildIndex = getChildIndexes(index)[0];//TODO left & right
-//		rightChildIndex = getChildIndexes(index)[1];
-//		int childIndex;
-////			if (array[leftChildIndex] < array[rightChildIndex]) {
-////				childIndex = rightChildIndex;
-////			} else {
-////				childIndex = leftChildIndex;
-////			}
-//		childIndex =(array[leftChildIndex] < array[rightChildIndex])?rightChildIndex:leftChildIndex;
-//		index = rearrangeElements(index, childIndex);
-//	}
-//}
-	
 	private void buildTreeFromTheTop(int index) {
 		int leftChildIndex = getLeftChild(index);
 		int rightChildIndex = getRightChild(index);
-		while (!(leftChildIndex > array.length||rightChildIndex  > array.length||
-				array[index] > array[leftChildIndex]&& array[index] > array[rightChildIndex])) {
+		while (!(leftChildIndex > array.length || rightChildIndex > array.length || 
+				array[index] > array[leftChildIndex] && array[index] > array[rightChildIndex])) {
+			int childIndex;
+			if (array[leftChildIndex] < array[rightChildIndex]) {
+				childIndex = rightChildIndex;
+			} else {
+				childIndex = leftChildIndex;
+			}
+			swap(index, childIndex);
+			index = childIndex;
 			leftChildIndex = getLeftChild(index);
 			rightChildIndex = getRightChild(index);
-							int childIndex;
-				if (array[leftChildIndex] < array[rightChildIndex]) {
-					childIndex = rightChildIndex;
-				} else {
-					childIndex = leftChildIndex;
-				}
-				swap(index, childIndex);
-				index = childIndex;
-			
 		}
 	}
 
-	
-//	private void buildTreeFromTheTop(int index) {
-//		while (true) {
-//			int leftChildIndex = getLeftChild(index);//TODO left & right
-//			int rightChildIndex = getRightChild(index);
-//			if (leftChildIndex > array.length||rightChildIndex  > array.length||
-//				array[index] > array[leftChildIndex]&& array[index] > array[rightChildIndex]) {
-//				break;
-//			} else {
-//				int childIndex;
-//				if (array[leftChildIndex] < array[rightChildIndex]) {
-//					childIndex = rightChildIndex;
-//				} else {
-//					childIndex = leftChildIndex;
-//				}
-//				swap(index, childIndex);
-//				index = childIndex;
-//			}
-//		}
-//	}
-
-	
 	private void buildTreeFromTheBottom(int element, int parentIndex, int childIndex) {
 		while (element > array[parentIndex]) {
 			int temp = array[parentIndex];
@@ -154,13 +134,6 @@ public class MaxHeap {
 		}
 	}
 
-	private int[] getChildIndexes(int parentIndex) {
-		int[] indexes = new int[2];
-		indexes[0] = parentIndex * 2 + 1;
-		indexes[1] = parentIndex * 2 + 2;
-		return indexes;
-	}
-
 	private int getIndexOfParentElement(int childIndex) {
 		if (childIndex % 2 == 0) {
 			return childIndex / 2 - 1;
@@ -169,7 +142,6 @@ public class MaxHeap {
 		}
 	}
 
-	// TODO: if the element wasn't found we shouldn't return 0
 	private int findIndexOfElement(int element) {
 		for (int i = 0; i < currentIndex; i++) {
 			if (array[i] == element)
